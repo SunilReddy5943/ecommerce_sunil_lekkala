@@ -2,19 +2,11 @@
 // Start the session and check if the user is logged in
 session_start();
 
-// Logout Logic - placed at the top of the script
-if (isset($_POST['logout'])) {
-    session_unset(); // Remove all session variables
-    session_destroy(); // Destroy the session
-    header("Location: pages/login.php"); // Redirect to login page
-    exit(); // Make sure no further code is executed after redirection
-}
-
-// Check if the user is logged in
+// If the user is not logged in, show the home page
 if (!isset($_SESSION['user_id'])) {
-    // If not logged in, redirect to the login page
-    header("Location: pages/login.php");
-    exit();
+    // Redirect to the home page (index.php) if not logged in
+    // This logic ensures the home page is shown first when the user is not logged in
+    // This is not a redirect, just displaying content
 }
 
 // Fetch products from the database
@@ -28,7 +20,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Store</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="CSS/style.css">
 </head>
 <body>
     <header>
@@ -41,7 +33,16 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <img src="images/cart-icon.png" alt="Cart" class="cart-icon">
                     Cart
                 </a>
-                <!-- Logout button -->
+
+                <!-- Admin Login -->
+                <a href="admin/login.php">Admin Login</a>
+
+                <!-- Admin Logout -->
+                <form method="POST" action="admin/logout.php" style="display: inline;">
+                    <button type="submit" class="logout-button">Admin Logout</button>
+                </form>
+
+                <!-- User Logout button -->
                 <form method="POST" style="display: inline;">
                     <button type="submit" name="logout" class="logout-button">Logout</button>
                 </form>
